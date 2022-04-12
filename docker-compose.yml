@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  dev:
+    container_name: web-chat-server-users
+    image: web-chat-server-users-image:1.0.0
+    build:
+      context: .
+      target: development
+      dockerfile: ./Dockerfile
+    command: npm run start:dev
+    ports:
+      - 9000:9000
+    restart: unless-stopped
+    depends_on:
+      - mongo
+      - cache
+    volumes:
+      - ./:/app
+    networks:
+      - app-network
+
+  mongo:
+    image: mongo
+    container_name: web-chat-server-users-mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - ./mongo-volume:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: users
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: s3cre3t123
+    networks:
+      - app-network
+
+  cache:
+    image: redis
+    container_name: web-chat-server-users-cache
+    restart: always
+    ports:
+      - 6379:6379
+    command: redis-server
+    volumes: 
+      - cache:/data
+    networks:
+      - app-network
+
+volumes:
+  mongo:
+    driver: local
+  cache:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
