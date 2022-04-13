@@ -9,7 +9,7 @@ let service: AuthService;
 
 describe('AuthService', () => {
     beforeEach(async () => {
-        // Create a fake users service    
+        // Create a fake users service
         const fakeUsersService: Partial<UsersService> = {
             retrieveByName: (name: string) => Promise.resolve({ _id: "1", name } as unknown as User),
             create: (user: Partial<User>) => Promise.resolve({ _id: "1", name: user.name } as unknown as User),
