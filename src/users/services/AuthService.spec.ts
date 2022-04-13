@@ -37,6 +37,15 @@ describe('AuthService', () => {
         expect(service).toBeDefined();
     });
 
+    it('Throws an error if invalid user name', async () => {
+        try {
+            await service.authenticateUser({ name: "          " });
+        } catch (error) {
+            const { response: { message } } = error;
+            expect(message).toEqual("Bad Request");
+        }
+    });
+
     it('Authenticates user and returns an access token', async () => {
         const results = await service.authenticateUser({ name: "Esteban" });
         expect(results.access_token).toBeDefined();

@@ -8,7 +8,7 @@ let service: UsersService;
 
 describe('UsersService', () => {
     beforeEach(async () => {
-        // Create a fake users service
+        // Create a fake users repository
         const fakeUsersRepository: Partial<UsersRepository> = {
             retrieve: () => Promise.resolve(
                 [
@@ -30,7 +30,7 @@ describe('UsersService', () => {
         }).compile();
 
         service = module.get(UsersService);
-    })
+    });
 
     it('Can create an instance of User Service', async () => {
         expect(service).toBeDefined();
