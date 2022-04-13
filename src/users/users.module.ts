@@ -1,5 +1,5 @@
 import { CacheModule, Module } from "@nestjs/common";
-import { UsersController } from "./controllers/user.controller";
+import { UsersController } from "./controllers/users.controller";
 import { UsersRepository } from "./repositories/users.repository";
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersSchema } from "./schemas/users.schema";

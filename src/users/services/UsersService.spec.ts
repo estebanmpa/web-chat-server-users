@@ -4,9 +4,10 @@ import { User } from "../models/user";
 import { UsersRepository } from "../repositories/users.repository";
 import { UsersService } from "./UsersService";
 
-let service: UsersService;
 
 describe('UsersService', () => {
+    let service: UsersService;
+
     beforeEach(async () => {
         // Create a fake users repository
         const fakeUsersRepository: Partial<UsersRepository> = {

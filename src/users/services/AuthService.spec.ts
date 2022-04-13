@@ -5,9 +5,10 @@ import { User } from "../models/user";
 import { AuthService } from "./AuthService";
 import { UsersService } from "./UsersService";
 
-let service: AuthService;
 
 describe('AuthService', () => {
+    let service: AuthService;
+
     beforeEach(async () => {
         // Create a fake users service
         const fakeUsersService: Partial<UsersService> = {
