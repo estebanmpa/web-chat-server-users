@@ -11,7 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: mr-smithers-excellent/docker-build-push@v5
+      - name: Push image to dockerhub
+        uses: mr-smithers-excellent/docker-build-push@v5
         with:
           image: estebanmpa/web-chat-server-users
           registry: docker.io
