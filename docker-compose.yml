@@ -13,14 +13,14 @@ services:
       - 9000:9000
     restart: unless-stopped
     depends_on:
-      - mongo
+      - mongo-users
       - cache
     volumes:
       - ./:/app
     networks:
       - app-network
 
-  mongo:
+  mongo-users:
     image: mongo
     container_name: web-chat-server-users-mongo
     ports:
