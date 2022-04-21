@@ -7,11 +7,11 @@ import { UsersService } from "./services/UsersService";
 import { AuthController } from "./controllers/auth.controller";
 import { AuthService } from "./services/AuthService";
 import { JwtModule } from "@nestjs/jwt";
-import { JWT_SECRET, REDIS_CONNECTION_STRING } from "src/common/config";
 import { UsersGateway } from "./sockets/usersGateway";
 import * as redisStore from 'cache-manager-redis-store';
 import { RedisClientOptions } from 'redis';
 import { CacheService } from "./services/CacheService";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 
 const controllers = [UsersController, AuthController];
 const providers = [UsersRepository, UsersService, AuthService, UsersGateway, CacheService];
@@ -21,15 +21,26 @@ const providers = [UsersRepository, UsersService, AuthService, UsersGateway, Cac
         MongooseModule.forFeature([
             { name: "User", schema: UsersSchema }
         ]),
-        JwtModule.register({
-            secret: JWT_SECRET,
-            signOptions: { expiresIn: '1 day' }
+        JwtModule.registerAsync({
+            imports: [ConfigModule],
+            useFactory: async (configService: ConfigService) => {
+                return {
+                    secret: configService.get('jwtSecret'),
+                    signOptions: { expiresIn: '1 day' }
+                }
+            },
+            inject: [ConfigService],
         }),
-        CacheModule.register<RedisClientOptions>({
-            store: redisStore,
-            url: REDIS_CONNECTION_STRING,
-            
-          }),
+        CacheModule.registerAsync<RedisClientOptions>({
+            imports: [ConfigModule],
+            useFactory: async (configService: ConfigService) => {
+                return {
+                    store: redisStore,
+                    url: configService.get('cache.connectionString')
+                }
+            },
+            inject: [ConfigService],
+        }),
     ],
     controllers: [...controllers],
     providers: [...providers]
